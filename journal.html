@@ -809,6 +809,16 @@ body.trades-quiet .app-orb{filter:blur(110px)!important;}
 .pf-unlocked-label{display:inline-flex;align-items:center;gap:5px;color:#42e6b2;font:700 8.5px/1 var(--font-mono);letter-spacing:.09em;text-transform:uppercase;}
 .pf-unlocked-label::before{content:'✓';display:grid;place-items:center;width:14px;height:14px;border-radius:50%;background:rgba(0,229,160,.12);border:1px solid rgba(0,229,160,.3);}
 @media(max-width:520px){.flex-showcase-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.pf-badges-panel .flex-showcase-card{min-height:104px;padding:13px}.pf-badges-panel .flex-showcase-icon{width:34px;height:34px;font-size:17px}.pf-badges-panel .flex-showcase-name{font-size:12px}.pf-badge-meta{align-items:flex-start;flex-direction:column}.pf-unlocked-label{font-size:8px}}
+.pf-real-badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;}
+.pf-real-badge{min-height:202px;padding:18px 12px 14px;background:linear-gradient(155deg,rgba(29,19,64,.94),rgba(12,12,39,.94));border-color:rgba(119,89,211,.26);cursor:default;}
+.pf-real-badge .lw-gallery-art{width:74px;height:74px;margin:0 auto 13px;}
+.pf-real-badge .lw-gallery-ring{top:8px;width:86px;height:86px;}
+.pf-real-badge .lw-gallery-name{font-size:12px;min-height:32px;margin-bottom:10px;}
+.pf-real-badge .lw-gallery-status{margin-bottom:11px;}
+.pf-real-badge .lw-gallery-progress{margin-top:auto;}
+.pf-real-badge.unlocked{display:flex;flex-direction:column;justify-content:flex-start;}
+.pf-real-badge.unlocked:hover{transform:translateY(-4px) scale(1.012);}
+@media(max-width:520px){.pf-real-badge-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.pf-real-badge{min-height:184px;padding:16px 9px 12px}.pf-real-badge .lw-gallery-art{width:64px;height:64px}.pf-real-badge .lw-gallery-ring{width:76px;height:76px}.pf-real-badge .lw-gallery-rarity-tag{font-size:6.8px;padding:2px 5px}.pf-real-badge .lw-gallery-name{font-size:10.5px}}
 .flex-queue-item:hover{border-color:rgba(255,255,255,.14);box-shadow:var(--shadow-sm);transform:translateY(-1px);}
 .flex-queue-info{min-width:180px;flex:1;}
 .flex-queue-name{font-weight:700;font-size:14px;color:var(--text);}
@@ -5075,6 +5085,40 @@ async function showPublicFlexPage(slug){
     if(repEl)repEl.outerHTML=flexReputationSummaryHTML({traderScore:legacyScore,league:legacyLeague,trust:legacyTrust,communityRank:null,signature:null,totalAchievements:0});
   }
 }
+function publicFlexBadgeArtwork(b,uid){
+  const title=String((b&&b.title)||'');
+  try{
+    if(title==='Perfect Week Legend') return lwPerfectWeekBadgeSVG('pw5',uid,false);
+    if(title==='Risk Sentinel Legend') return lwRiskSentinelBadgeSVG('rs5',uid,false);
+    if(title==='Comeback Kid') return lwComebackKidBadgeSVG(uid,false);
+    if(title==='No Revenge Trading') return lwNoRevengeTradingBadgeSVG(uid,false);
+    if(title==='Century Club') return lwCenturyClubBadgeSVG(uid,false);
+    if(title==='Patience Pays') return lwPatiencePaysBadgeSVG(uid,false);
+    if(title==='Zero Revenge') return lwZeroRevengeBadgeSVG(uid,false);
+    if(title==='Iron Hands') return lwIronHandsBadgeSVG(uid,false);
+    if(title==='Metronome') return lwMetronomeBadgeSVG(uid,false);
+    if(title==='Drawdown Shield') return lwDrawdownShieldBadgeSVG(uid,false);
+    if(title==='Full Circle') return lwFullCircleBadgeSVG(uid,false);
+    if(title==='Improvement Arc') return lwImprovementArcBadgeSVG(uid,false);
+    if(title==='League Breaker') return lwLeagueBreakerBadgeSVG(uid,false);
+    if(title==='Psycho Trader') return lwPsychoTraderBadgeSVG(uid,false);
+    if(title==='Legend Status') return lwLegendStatusBadgeSVG(uid,false);
+  }catch(error){ console.warn('Badge artwork fallback:',title,error); }
+  return '<div class="lw-gallery-glyph">'+esc((b&&b.icon)||'★')+'</div>';
+}
+function publicFlexBadgeCardHTML(b,index,email){
+  const color=lwRarityColor(b.rarity);
+  const id='pf-badge-'+index;
+  const rarity=esc(b.rarity||'Unranked');
+  return '<div class="lw-gallery-tile unlocked pf-real-badge" data-badge-id="'+id+'" data-rarity="'+rarity+'" onclick="trackFlexEvent('+JSON.stringify(email)+',\'badgeView\')">'
+    +'<div class="lw-gallery-rarity-tag" style="color:'+esc(color)+';border-color:'+esc(color)+'66;background:'+esc(color)+'1a;">'+rarity+'</div>'
+    +'<div class="lw-gallery-ring">'+lwBadgeRingSVG(100,color)+'</div>'
+    +'<div class="lw-gallery-art">'+publicFlexBadgeArtwork(b,id)+'</div>'
+    +'<div class="lw-gallery-name">'+esc(b.title)+'</div>'
+    +'<div class="lw-gallery-status unlocked">✓ Unlocked</div>'
+    +'<div class="lw-gallery-progress"><div class="lw-gallery-progress-fill" style="width:100%;background:'+esc(color)+';"></div></div>'
+    +'</div>';
+}
 function renderPublicFlexProfilePage(rec){
   const content=document.getElementById('pf-content');
   const sec=rec.sections||{};
@@ -5086,7 +5130,7 @@ function renderPublicFlexProfilePage(rec){
   const statsCard=sec.statistics?('<div class="pf-panel pf-stats-panel"><div class="flex-feed-head"><div class="eyebrow">Performance Overview</div></div>'+renderFlexCardHTML(rec.displayName,rec.visibility,rec.snapshot)+'</div>'):'';
   const badgesHTML=(sec.badges&&rec.badges&&rec.badges.length)?(
     '<div class="pf-panel pf-badges-panel"><div class="flex-feed-head"><div class="eyebrow">Badge Collection</div></div>'
-    +'<div class="flex-showcase-grid">'+rec.badges.map(function(b){const color=lwRarityColor(b.rarity);return'<div class="flex-showcase-card" style="cursor:pointer;--badge-color:'+esc(color)+';" onclick="trackFlexEvent('+JSON.stringify(rec.email)+',\'badgeView\')"><div class="flex-showcase-card-head"><span class="flex-showcase-icon" style="color:'+esc(color)+';">'+b.icon+'</span><div class="flex-showcase-name">'+esc(b.title)+'</div></div><div class="pf-badge-meta"><div class="flex-rarity-pill" style="color:'+esc(color)+';">'+esc(b.rarity)+'</div><span class="pf-unlocked-label">Unlocked</span></div></div>';}).join('')+'</div></div>'
+    +'<div class="pf-real-badge-grid">'+rec.badges.map(function(b,index){return publicFlexBadgeCardHTML(b,index,rec.email);}).join('')+'</div></div>'
   ):'';
   const achvHTML=sec.achievements?(
     '<div class="pf-panel pf-achievements-panel"><div class="flex-feed-head"><div class="eyebrow">Recent Achievements</div></div>'
