@@ -1554,14 +1554,19 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
   var PRESENTATION_BADGES = [
     {badge_id:'perfect_week_legend',badge_name:'Perfect Week Legend',badge_level:'Legendary',rarity:'Legendary',icon:'🏆',progress:100,is_unlocked:true,is_public:true},
     {badge_id:'risk_sentinel_legend',badge_name:'Risk Sentinel Legend',badge_level:'Legendary',rarity:'Legendary',icon:'🛡️',progress:100,is_unlocked:true,is_public:true},
-    {badge_id:'comeback_kid',badge_name:'Comeback Kid',badge_level:'Special',rarity:'Epic',icon:'🔥',progress:100,is_unlocked:true,is_public:true},
-    {badge_id:'no_revenge_trading',badge_name:'No Revenge Trading',badge_level:'Special',rarity:'Epic',icon:'🧊',progress:100,is_unlocked:true,is_public:true},
-    {badge_id:'league_breaker',badge_name:'League Breaker',badge_level:'Legend',rarity:'Epic',icon:'♛',progress:100,is_unlocked:true,is_public:true},
-    {badge_id:'legend_status',badge_name:'Legend Status',badge_level:'Legend',rarity:'Legendary',icon:'★',progress:100,is_unlocked:true,is_public:true},
-    {badge_id:'iron_hands',badge_name:'Iron Hands',badge_level:'Mastery',rarity:'Rare',icon:'💎',progress:100,is_unlocked:true,is_public:true},
-    {badge_id:'drawdown_shield',badge_name:'Drawdown Shield',badge_level:'Mastery',rarity:'Rare',icon:'🔰',progress:100,is_unlocked:true,is_public:true},
-    {badge_id:'century_club',badge_name:'Century Club',badge_level:'Milestone',rarity:'Epic',icon:'💯',progress:100,is_unlocked:true,is_public:true},
-    {badge_id:'metronome',badge_name:'Metronome',badge_level:'Consistency',rarity:'Rare',icon:'📊',progress:100,is_unlocked:true,is_public:true}
+    {badge_id:'comeback_kid',badge_name:'Comeback Kid',badge_level:'Special',rarity:'Ultra Rare',icon:'🔥',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'no_revenge_trading',badge_name:'No Revenge Trading',badge_level:'Special',rarity:'Ultra Rare',icon:'🧊',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'century_club',badge_name:'Century Club',badge_level:'Milestone',rarity:'Ultra Rare',icon:'💯',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'patience_pays',badge_name:'Patience Pays',badge_level:'Special',rarity:'Ultra Rare',icon:'⏳',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'zero_revenge',badge_name:'Zero Revenge',badge_level:'Special',rarity:'Mythic',icon:'❄️',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'iron_hands',badge_name:'Iron Hands',badge_level:'Mastery',rarity:'Ultra Rare',icon:'💎',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'metronome',badge_name:'Metronome',badge_level:'Consistency',rarity:'Ultra Rare',icon:'🎼',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'drawdown_shield',badge_name:'Drawdown Shield',badge_level:'Mastery',rarity:'Ultra Rare',icon:'🔰',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'full_circle',badge_name:'Full Circle',badge_level:'Special',rarity:'Mythic',icon:'🔄',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'improvement_arc',badge_name:'Improvement Arc',badge_level:'Special',rarity:'Rare',icon:'📈',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'league_breaker',badge_name:'League Breaker',badge_level:'Legend',rarity:'Mythic',icon:'♛',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'psycho_trader',badge_name:'Psycho Trader',badge_level:'Special',rarity:'Legendary',icon:'☠',progress:100,is_unlocked:true,is_public:true},
+    {badge_id:'legend_status',badge_name:'Legend Status',badge_level:'Legend',rarity:'Mythic',icon:'★',progress:100,is_unlocked:true,is_public:true}
   ];
 
   function stripPresentationControls(){
@@ -1874,7 +1879,9 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
       trust: trust,
       traderScore: Math.round(scores.composite || 0),
       communityRank: null,
-      badges: Array.isArray(row.badges_snapshot) ? row.badges_snapshot : [],
+      badges: PRESENTATION_BADGES.map(function(badge){
+        return {icon:badge.icon,title:badge.badge_name,rarity:badge.rarity,unlocked:true};
+      }),
       avatarDataUrl: publicAsset(row.avatar_path),
       email: row.user_id
     };
@@ -1946,8 +1953,8 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
     var trades = marketFilteredTrades(computedTrades());
     var stats = getStats(trades);
     var scores = lwScoresFromStats(stats);
-    var badges = LW_BADGES.filter(function(b){ return !b.comingSoon && b.test(scores); }).map(function(b){
-      return { icon:b.icon, title:b.title, rarity:b.rarity };
+    var badges = PRESENTATION_BADGES.map(function(badge){
+      return { icon:badge.icon, title:badge.badge_name, rarity:badge.rarity, unlocked:true };
     });
     var displayName = state.flex.displayName || profile.displayName || session.user.email.split('@')[0];
     var avatarPath = await uploadAvatar(getAvatarDataUrl(), userId, page.avatar_path);
