@@ -1526,7 +1526,8 @@ function showApp(){
   if(!journalLoaded){
     const frame = document.getElementById('journalFrame');
     frame.addEventListener('load', function(){ connectJournalFrame(frame); }, { once:true });
-    frame.src = 'journal.html';
+    // Versioned URL prevents GitHub Pages/browser cache from serving an older journal UI.
+    frame.src = 'journal.html?v=20260721-premium-header-2';
     journalLoaded = true;
   }
 }
