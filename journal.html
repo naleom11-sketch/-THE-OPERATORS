@@ -5106,9 +5106,7 @@ async function showPublicFlexPage(slug){
   }catch(e){}
   content.innerHTML='<div class="pf-headline">Verified Trading Performance</div>'
     +flexReputationSummaryHTML({traderScore:legacyScore,league:legacyLeague,trust:legacyTrust,communityRank:null})
-    +renderFlexCardHTML(rec.displayName,rec.visibility,rec.snapshot,{badge:'<span class="flex-badge approved">✓ Verified</span>'})
-    +'<div class="panel" style="margin-top:16px;"><div class="flex-feed-head"><div class="eyebrow">Achievement Showcase</div></div>'
-      +'<div id="pf-achievement-list" class="lw-activity-feed-list"><div class="lw-recent-empty">Loading achievements…</div></div></div>';
+    +renderFlexCardHTML(rec.displayName,rec.visibility,rec.snapshot,{badge:'<span class="flex-badge approved">✓ Verified</span>'});
   if(rec.email){
     try{
       const items=(await fetchCommunityFeed()).filter(it=>String(it.email||'').toLowerCase()===String(rec.email).toLowerCase());
@@ -5178,11 +5176,7 @@ function renderPublicFlexProfilePage(rec){
     '<div class="pf-panel pf-badges-panel"><div class="flex-feed-head"><div class="eyebrow">Badge Collection</div></div>'
     +'<div class="pf-real-badge-grid">'+rec.badges.map(function(b,index){return publicFlexBadgeCardHTML(b,index,rec.email);}).join('')+'</div></div>'
   ):'';
-  const achvHTML=sec.achievements?(
-    '<div class="pf-panel pf-achievements-panel"><div class="flex-feed-head"><div class="eyebrow">Recent Achievements</div></div>'
-    +'<div id="pf-achievement-list" class="lw-activity-feed-list"><div class="lw-recent-empty">Loading achievements…</div></div></div>'
-  ):'';
-  content.innerHTML=header+repSummary+statsCard+badgesHTML+achvHTML;
+  content.innerHTML=header+repSummary+statsCard+badgesHTML;
   if(rec.email){
     trackFlexEvent(rec.email,'view');
     if(sec.badges&&rec.badges&&rec.badges.length)trackFlexEvent(rec.email,'badgeView');
