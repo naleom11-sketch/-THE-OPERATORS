@@ -863,7 +863,30 @@ body.trades-quiet .app-orb{filter:blur(110px)!important;}
 /* ===== PUBLIC FLEX SHARE PAGE ===== */
 #screen-public-flex{position:fixed;inset:0;z-index:90;background:#030711;color:var(--text-main);font-family:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow-y:auto;overflow-x:hidden;}
 #screen-public-flex.hidden{display:none;}
-.pf-wrap{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:26px 28px 52px;text-align:left;background:radial-gradient(900px 520px at 8% -8%,rgba(29,129,255,.2),transparent 62%),radial-gradient(780px 500px at 95% 18%,rgba(104,65,255,.15),transparent 66%),radial-gradient(720px 500px at 50% 110%,rgba(0,229,160,.07),transparent 70%),linear-gradient(180deg,#040815 0%,#030711 48%,#060817 100%);}
+.pf-nav-shell{position:sticky;top:0;z-index:120;width:100%;padding:10px 22px;background:linear-gradient(180deg,rgba(2,6,18,.97),rgba(4,8,22,.88));border-bottom:1px solid rgba(96,150,233,.18);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);box-shadow:0 18px 55px rgba(0,0,0,.3);}
+.pf-nav-shell::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(420px 90px at 12% 0%,rgba(47,196,255,.12),transparent 68%),radial-gradient(500px 100px at 86% 0%,rgba(123,92,255,.12),transparent 70%);}
+.pf-nav-shell::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,#2fc4ff 22%,#765cff 55%,#00e5a0 78%,transparent);opacity:.6;}
+.pf-navbar{position:relative;width:min(1260px,100%);height:66px;margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:22px;padding:0 18px;border:1px solid rgba(114,164,239,.18);border-radius:18px;background:linear-gradient(135deg,rgba(12,23,44,.82),rgba(8,12,31,.76));box-shadow:inset 0 1px rgba(255,255,255,.045),0 12px 34px rgba(0,0,0,.24);overflow:hidden;}
+.pf-navbar::after{content:'';position:absolute;width:180px;height:90px;right:-55px;top:-52px;border-radius:50%;background:radial-gradient(circle,rgba(70,139,255,.2),transparent 70%);pointer-events:none;}
+.pf-nav-brand{display:flex;align-items:center;gap:12px;min-width:0;text-decoration:none;}
+.pf-nav-logo{position:relative;width:42px;height:42px;border-radius:13px;display:grid;place-items:center;flex-shrink:0;color:#eaf5ff;font:800 18px/1 var(--font-display);background:linear-gradient(145deg,#07152c 5%,#0c4c91 42%,#2f9dff 72%,#27dfbd 110%);border:1px solid rgba(132,201,255,.52);box-shadow:0 0 0 3px rgba(47,157,255,.07),0 0 28px rgba(47,157,255,.28),inset 0 1px rgba(255,255,255,.25);}
+.pf-nav-logo::before{content:'';position:absolute;inset:-5px;border:1px solid rgba(63,182,255,.18);border-radius:17px;animation:pf-logo-breathe 2.8s ease-in-out infinite;}
+.pf-nav-logo::after{content:'';position:absolute;width:7px;height:7px;right:-3px;bottom:3px;border-radius:50%;background:#00e5a0;border:2px solid #071020;box-shadow:0 0 13px #00e5a0;}
+.pf-nav-title{font-size:15px;font-weight:800;letter-spacing:.12em;color:#eef6ff;white-space:nowrap;}
+.pf-nav-title span{color:#57c7ff;text-shadow:0 0 24px rgba(62,184,255,.42);}
+.pf-nav-subtitle{font:600 8px/1.2 var(--font-mono);letter-spacing:.15em;text-transform:uppercase;color:#66809f;margin-top:5px;white-space:nowrap;}
+.pf-nav-center{display:flex;align-items:center;gap:8px;padding:6px;border:1px solid rgba(114,157,222,.15);border-radius:999px;background:rgba(2,7,20,.42);}
+.pf-nav-chip{display:inline-flex;align-items:center;gap:7px;padding:8px 12px;border-radius:999px;color:#7e94b3;font:700 9px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;}
+.pf-nav-chip.active{color:#bdeaff;background:linear-gradient(135deg,rgba(47,196,255,.13),rgba(83,91,255,.11));box-shadow:inset 0 0 0 1px rgba(73,181,255,.2);}
+.pf-nav-live-dot{width:6px;height:6px;border-radius:50%;background:#00e5a0;box-shadow:0 0 12px #00e5a0;animation:pf-live-pulse 1.8s ease-in-out infinite;}
+.pf-nav-actions{display:flex;align-items:center;justify-content:flex-end;gap:9px;position:relative;z-index:1;}
+.pf-nav-button{height:38px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:0 14px;border-radius:11px;border:1px solid rgba(110,156,226,.22);background:rgba(255,255,255,.035);color:#a9bdd9;font:700 10px/1 var(--font-mono);letter-spacing:.05em;cursor:pointer;transition:transform .2s ease,border-color .2s ease,color .2s ease,background .2s ease,box-shadow .2s ease;white-space:nowrap;}
+.pf-nav-button:hover{transform:translateY(-1px);color:#f0f7ff;border-color:rgba(80,187,255,.48);background:rgba(61,153,255,.09);box-shadow:0 8px 22px rgba(0,0,0,.22);}
+.pf-nav-button.copied{color:#58f0bf;border-color:rgba(0,229,160,.42);background:rgba(0,229,160,.09);}
+.pf-nav-button.primary{border-color:rgba(72,178,255,.44);color:#06101f;background:linear-gradient(135deg,#49d4f5,#348cff 58%,#655cff);box-shadow:0 8px 25px rgba(38,130,255,.25),inset 0 1px rgba(255,255,255,.3);}
+.pf-nav-button.primary:hover{color:#030b18;border-color:rgba(130,218,255,.72);box-shadow:0 10px 30px rgba(38,130,255,.38),0 0 25px rgba(66,181,255,.16);}
+.pf-nav-button svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;}
+.pf-wrap{position:relative;min-height:calc(100vh - 87px);display:flex;flex-direction:column;align-items:center;padding:32px 28px 52px;text-align:left;background:radial-gradient(900px 520px at 8% -8%,rgba(29,129,255,.2),transparent 62%),radial-gradient(780px 500px at 95% 18%,rgba(104,65,255,.15),transparent 66%),radial-gradient(720px 500px at 50% 110%,rgba(0,229,160,.07),transparent 70%),linear-gradient(180deg,#040815 0%,#030711 48%,#060817 100%);}
 .pf-wrap::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(rgba(114,151,211,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(114,151,211,.08) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,black,transparent 72%);}
 .pf-brand{position:relative;z-index:1;width:min(1180px,100%);display:flex;flex-direction:row;align-items:center;gap:11px;margin:0 auto 28px;padding:0 2px;animation:pf-rise .6s cubic-bezier(.16,1,.3,1) both;}
 .pf-brand .lg-mark{width:34px;height:34px;margin:0!important;border-radius:10px;box-shadow:0 0 28px rgba(57,155,255,.25);}
@@ -883,9 +906,12 @@ body.trades-quiet .app-orb{filter:blur(110px)!important;}
 .pf-cta:hover .pf-cta-arrow{transform:translateX(3px);}
 .pf-cta:active{transform:translateY(0);}
 @keyframes pf-rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-@media(prefers-reduced-motion:reduce){.pf-brand,.pf-content,.pf-cta{animation:none;}}
-@media(max-width:780px){.pf-wrap{padding:20px 14px 40px}.pf-content{grid-template-columns:1fr;gap:14px}.pf-content>*{grid-column:1!important}.pf-brand{margin-bottom:18px}.pf-brand-name::after{display:none}.pf-headline{font-size:27px}.pf-content .flex-card:hover{transform:none}}
-@media(max-width:480px){.pf-headline{font-size:24px;}.pf-brand-name{font-size:10px}.pf-cta{margin-top:22px}}
+@keyframes pf-logo-breathe{0%,100%{opacity:.35;transform:scale(.96)}50%{opacity:.9;transform:scale(1.04)}}
+@keyframes pf-live-pulse{0%,100%{opacity:.55;box-shadow:0 0 7px #00e5a0}50%{opacity:1;box-shadow:0 0 16px #00e5a0}}
+@media(prefers-reduced-motion:reduce){.pf-brand,.pf-content,.pf-cta,.pf-nav-logo::before,.pf-nav-live-dot{animation:none;}}
+@media(max-width:900px){.pf-navbar{grid-template-columns:1fr auto}.pf-nav-center{display:none}}
+@media(max-width:780px){.pf-nav-shell{padding:8px 10px}.pf-navbar{height:60px;padding:0 12px;border-radius:15px;gap:10px}.pf-nav-logo{width:37px;height:37px;border-radius:11px;font-size:16px}.pf-nav-title{font-size:12px}.pf-nav-subtitle{display:none}.pf-nav-button{height:35px;padding:0 11px}.pf-nav-button.primary{display:none}.pf-wrap{padding:22px 14px 40px}.pf-content{grid-template-columns:1fr;gap:14px}.pf-content>*{grid-column:1!important}.pf-headline{font-size:27px}.pf-content .flex-card:hover{transform:none}}
+@media(max-width:480px){.pf-headline{font-size:24px}.pf-cta{margin-top:22px}.pf-nav-button .pf-nav-button-text{display:none}.pf-nav-button{width:36px;padding:0}.pf-nav-brand{gap:9px}}
 /* ── Premium Public Flex Profile: header banner, highlights, share box, preview ── */
 .pf-profile-header{grid-column:1/-1;position:relative;border-radius:24px;padding:34px;background:linear-gradient(135deg,rgba(13,33,65,.96),rgba(9,16,35,.94) 58%,rgba(20,13,49,.9));border:1px solid rgba(116,164,237,.2);overflow:hidden;text-align:left;box-shadow:0 30px 90px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.04);}
 .pf-profile-header::before{content:'';position:absolute;width:520px;height:520px;right:-170px;top:-300px;border-radius:50%;background:radial-gradient(circle,rgba(64,156,255,.3),rgba(103,63,255,.1) 42%,transparent 68%);pointer-events:none;}
@@ -4713,8 +4739,28 @@ body:has(.blublu-fg) .nav-item-blublu.active{
 
 <!-- ========== PUBLIC FLEX SHARE SCREEN ========== -->
 <div id="screen-public-flex" class="hidden">
+  <div class="pf-nav-shell">
+    <header class="pf-navbar">
+      <div class="pf-nav-brand">
+        <span class="pf-nav-logo">O</span>
+        <span><span class="pf-nav-title">THE <span>OPERATORS</span></span><span class="pf-nav-subtitle">Verified trader network</span></span>
+      </div>
+      <div class="pf-nav-center" aria-label="Flex profile status">
+        <span class="pf-nav-chip active"><span class="pf-nav-live-dot"></span>Public Flex</span>
+        <span class="pf-nav-chip">Verified Portfolio</span>
+      </div>
+      <div class="pf-nav-actions">
+        <button type="button" class="pf-nav-button" onclick="copyPublicFlexCurrentLink(this)" aria-label="Copy public Flex link">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"></rect><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"></path></svg>
+          <span class="pf-nav-button-text">Share Profile</span>
+        </button>
+        <button type="button" class="pf-nav-button primary" onclick="exitPublicFlex()">
+          Explore Platform <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </header>
+  </div>
   <div class="pf-wrap">
-    <div class="pf-brand"><span class="lg-mark" style="margin:0 auto;">L</span><div class="pf-brand-name">THE LEGEND JOURNAL</div></div>
     <div id="pf-content" class="pf-content"></div>
     <a class="pf-cta" onclick="exitPublicFlex()">Start your own trading journal <span class="pf-cta-arrow">→</span></a>
   </div>
@@ -5157,6 +5203,27 @@ function renderPublicFlexProfilePage(rec){
   } else {
     const repEl=document.getElementById('pf-reputation-summary');
     if(repEl)repEl.outerHTML=flexReputationSummaryHTML({traderScore:rec.traderScore,league:rec.league,trust:rec.trust,communityRank:rec.communityRank,signature:null,totalAchievements:0});
+  }
+}
+async function copyPublicFlexCurrentLink(button){
+  const url=window.location.href;
+  let copied=false;
+  try{
+    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(url);copied=true;}
+  }catch(error){}
+  if(!copied){
+    const helper=document.createElement('textarea');
+    helper.value=url;helper.setAttribute('readonly','');helper.style.position='fixed';helper.style.opacity='0';
+    document.body.appendChild(helper);helper.select();
+    try{copied=document.execCommand('copy');}catch(error){}
+    helper.remove();
+  }
+  if(button){
+    const label=button.querySelector('.pf-nav-button-text');
+    const original=label?label.textContent:'';
+    if(label)label.textContent=copied?'Copied ✓':'Copy failed';
+    button.classList.toggle('copied',copied);
+    setTimeout(function(){if(label)label.textContent=original;button.classList.remove('copied');},1600);
   }
 }
 function exitPublicFlex(){
