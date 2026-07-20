@@ -839,50 +839,64 @@ body.trades-quiet .app-orb{filter:blur(110px)!important;}
 .flex-verified-badge svg{width:12px;height:12px;}
 
 /* ===== PUBLIC FLEX SHARE PAGE ===== */
-#screen-public-flex{position:fixed;inset:0;z-index:90;background:var(--bg-left);color:var(--text-main);font-family:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow-y:auto;}
+#screen-public-flex{position:fixed;inset:0;z-index:90;background:#030711;color:var(--text-main);font-family:'Sora',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;overflow-y:auto;overflow-x:hidden;}
 #screen-public-flex.hidden{display:none;}
-.pf-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:56px 24px;text-align:center;
-  background:radial-gradient(ellipse 760px 540px at 50% 0%,rgba(30,111,217,.14),transparent 65%),
-    radial-gradient(ellipse 500px 400px at 85% 100%,rgba(0,229,160,.05),transparent 70%),var(--bg-left);}
-.pf-brand{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:38px;animation:pf-rise .6s cubic-bezier(.16,1,.3,1) both;}
-.pf-brand-name{font-size:11px;letter-spacing:.22em;color:var(--text-dim);text-transform:uppercase;position:relative;padding-bottom:12px;}
-.pf-brand-name::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:28px;height:1px;background:linear-gradient(90deg,transparent,rgba(127,196,255,.5),transparent);}
-.pf-content{width:100%;max-width:440px;display:flex;flex-direction:column;align-items:center;animation:pf-rise .7s .08s cubic-bezier(.16,1,.3,1) both;}
-.pf-headline{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:600;color:var(--text-main);margin-bottom:20px;letter-spacing:.2px;}
-.pf-content .flex-card{width:100%;max-width:420px;background-color:rgba(10,18,32,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 8px 40px rgba(0,0,0,.35);transition:border-color .25s ease,box-shadow .35s ease,transform .35s cubic-bezier(.4,0,.2,1);}
-.pf-content .flex-card:hover{box-shadow:0 16px 56px rgba(0,0,0,.45);transform:translateY(-4px);}
+.pf-wrap{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:26px 28px 52px;text-align:left;background:radial-gradient(900px 520px at 8% -8%,rgba(29,129,255,.2),transparent 62%),radial-gradient(780px 500px at 95% 18%,rgba(104,65,255,.15),transparent 66%),radial-gradient(720px 500px at 50% 110%,rgba(0,229,160,.07),transparent 70%),linear-gradient(180deg,#040815 0%,#030711 48%,#060817 100%);}
+.pf-wrap::before{content:'';position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(rgba(114,151,211,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(114,151,211,.08) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,black,transparent 72%);}
+.pf-brand{position:relative;z-index:1;width:min(1180px,100%);display:flex;flex-direction:row;align-items:center;gap:11px;margin:0 auto 28px;padding:0 2px;animation:pf-rise .6s cubic-bezier(.16,1,.3,1) both;}
+.pf-brand .lg-mark{width:34px;height:34px;margin:0!important;border-radius:10px;box-shadow:0 0 28px rgba(57,155,255,.25);}
+.pf-brand-name{font-size:11px;font-weight:700;letter-spacing:.2em;color:#b9c9e5;text-transform:uppercase;}
+.pf-brand-name::after{content:'PUBLIC TRADER PORTFOLIO';margin-left:14px;padding-left:14px;border-left:1px solid rgba(157,185,230,.2);color:#58708f;font-size:9px;letter-spacing:.15em;}
+.pf-content{position:relative;z-index:1;width:min(1180px,100%);display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:18px;align-items:start;animation:pf-rise .7s .08s cubic-bezier(.16,1,.3,1) both;}
+.pf-headline{grid-column:1/-1;font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:600;color:var(--text-main);margin:2px 0 4px;letter-spacing:.1px;}
+.pf-content .flex-card{width:100%;max-width:none;background:linear-gradient(145deg,rgba(11,20,38,.92),rgba(7,13,27,.82));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 22px 65px rgba(0,0,0,.35);transition:border-color .25s ease,box-shadow .35s ease,transform .35s cubic-bezier(.4,0,.2,1);}
+.pf-content .flex-card:hover{box-shadow:0 26px 72px rgba(0,0,0,.45);transform:translateY(-2px);}
 .pf-content .flex-card:not(:has(.flex-badge.approved)){border:1px solid rgba(26,42,68,.8);}
 .pf-content .flex-metric{background-color:rgba(255,255,255,.04);}
 .pf-content .flex-card-name{color:var(--text-main);}
-.pf-loading,.pf-notfound{font-size:14px;color:var(--text-dim);padding:30px 10px;max-width:380px;}
-.pf-cta{margin-top:38px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;letter-spacing:.04em;color:var(--gold-soft);background:rgba(127,196,255,.06);border:1px solid rgba(127,196,255,.22);border-radius:24px;padding:11px 20px;cursor:pointer;transition:color .2s ease,background .2s ease,border-color .2s ease,transform .2s cubic-bezier(.4,0,.2,1),box-shadow .2s ease;animation:pf-rise .7s .16s cubic-bezier(.16,1,.3,1) both;}
+.pf-loading,.pf-notfound{grid-column:1/-1;font-size:14px;color:var(--text-dim);padding:70px 20px;text-align:center;}
+.pf-cta{position:relative;z-index:1;margin-top:28px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;letter-spacing:.04em;color:#b9ddff;background:rgba(49,142,255,.09);border:1px solid rgba(82,167,255,.28);border-radius:24px;padding:11px 20px;cursor:pointer;transition:color .2s ease,background .2s ease,border-color .2s ease,transform .2s cubic-bezier(.4,0,.2,1),box-shadow .2s ease;animation:pf-rise .7s .16s cubic-bezier(.16,1,.3,1) both;}
 .pf-cta-arrow{display:inline-block;transition:transform .2s cubic-bezier(.4,0,.2,1);}
 .pf-cta:hover{color:var(--text-main);background:rgba(127,196,255,.1);border-color:rgba(127,196,255,.4);transform:translateY(-1px);box-shadow:0 6px 18px rgba(30,111,217,.18);}
 .pf-cta:hover .pf-cta-arrow{transform:translateX(3px);}
 .pf-cta:active{transform:translateY(0);}
 @keyframes pf-rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
 @media(prefers-reduced-motion:reduce){.pf-brand,.pf-content,.pf-cta{animation:none;}}
-@media(max-width:480px){.pf-headline{font-size:21px;}}
+@media(max-width:780px){.pf-wrap{padding:20px 14px 40px}.pf-content{grid-template-columns:1fr;gap:14px}.pf-content>*{grid-column:1!important}.pf-brand{margin-bottom:18px}.pf-brand-name::after{display:none}.pf-headline{font-size:27px}.pf-content .flex-card:hover{transform:none}}
+@media(max-width:480px){.pf-headline{font-size:24px;}.pf-brand-name{font-size:10px}.pf-cta{margin-top:22px}}
 /* ── Premium Public Flex Profile: header banner, highlights, share box, preview ── */
-.pf-profile-header{position:relative;border-radius:14px;padding:26px 22px;background:linear-gradient(160deg,rgba(30,111,217,.14),rgba(10,18,32,.4));border:1px solid var(--border-soft);overflow:hidden;margin-bottom:16px;text-align:left;}
-.pf-profile-header::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 340px 180px at 100% 0%,rgba(255,215,106,.14),transparent 70%);pointer-events:none;}
+.pf-profile-header{grid-column:1/-1;position:relative;border-radius:24px;padding:34px;background:linear-gradient(135deg,rgba(13,33,65,.96),rgba(9,16,35,.94) 58%,rgba(20,13,49,.9));border:1px solid rgba(116,164,237,.2);overflow:hidden;text-align:left;box-shadow:0 30px 90px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.04);}
+.pf-profile-header::before{content:'';position:absolute;width:520px;height:520px;right:-170px;top:-300px;border-radius:50%;background:radial-gradient(circle,rgba(64,156,255,.3),rgba(103,63,255,.1) 42%,transparent 68%);pointer-events:none;}
+.pf-profile-header::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,#2fc4ff,#6b63ff 55%,#00e5a0);opacity:.75;}
 .pf-profile-header-row{display:flex;align-items:center;gap:16px;position:relative;z-index:1;}
-.pf-avatar-lg{width:64px;height:64px;border-radius:50%;background:linear-gradient(145deg,#061224,#0D3A73 30%,#1E6FD9 55%,#4DA6FF 75%,#00E5A0 100%);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;font-family:var(--font-display);font-style:italic;flex-shrink:0;box-shadow:var(--shadow-md),0 0 0 3px rgba(255,255,255,.08);}
+.pf-avatar-lg{width:82px;height:82px;border-radius:22px;background:linear-gradient(145deg,#061224,#0D3A73 30%,#1E6FD9 55%,#4DA6FF 75%,#00E5A0 100%);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;color:#fff;font-family:var(--font-display);font-style:italic;flex-shrink:0;box-shadow:0 16px 40px rgba(0,0,0,.32),0 0 0 1px rgba(135,196,255,.35),0 0 28px rgba(44,144,255,.2);}
 .pf-avatar-lg img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
-.pf-name-xl{font-family:var(--font-display);font-weight:700;font-size:20px;color:var(--text-main);letter-spacing:-.2px;}
-.pf-tagline{font-size:12.5px;color:var(--text-dim);margin-top:3px;}
+.pf-name-xl{font-family:var(--font-display);font-weight:700;font-size:30px;color:#f5f8ff;letter-spacing:-.5px;}
+.pf-tagline{font-size:13px;color:#91a7c8;margin-top:5px;}
+.pf-public-badge{display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:6px 10px;border:1px solid rgba(0,229,160,.3);border-radius:999px;background:rgba(0,229,160,.08);color:#54edbd;font:700 9px/1 var(--font-mono);letter-spacing:.11em;text-transform:uppercase;}
+.pf-public-badge-dot{width:6px;height:6px;border-radius:50%;background:#00e5a0;box-shadow:0 0 12px #00e5a0;}
 .pf-highlight-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:10px;margin-top:18px;position:relative;z-index:1;}
-.pf-highlight-item{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.035);border:1px solid var(--border-soft);border-radius:9px;padding:9px 11px;}
+.pf-highlight-item{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.045);border:1px solid rgba(132,167,220,.16);border-radius:12px;padding:11px 13px;}
 .pf-highlight-icon{font-size:14px;color:var(--gold-light);flex-shrink:0;}
 .pf-highlight-value{font-size:13.5px;font-weight:700;color:var(--text-main);font-family:var(--font-mono);line-height:1.2;}
 .pf-highlight-label{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-faint);margin-top:1px;}
-.pf-panel{border-radius:12px;padding:16px;background:rgba(255,255,255,.02);border:1px solid var(--border-soft);margin-top:14px;text-align:left;}
+.pf-panel{width:100%;border-radius:18px;padding:20px;background:linear-gradient(145deg,rgba(11,20,38,.86),rgba(7,13,27,.78));border:1px solid rgba(113,151,211,.16);text-align:left;box-shadow:0 18px 55px rgba(0,0,0,.24);}
+.pf-stats-panel,.pf-certificate-panel{grid-column:1/-1;}
+.pf-certificate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px;}
+.pf-certificate-card{display:flex;min-height:132px;border-radius:15px;overflow:hidden;background:rgba(4,9,21,.72);border:1px solid rgba(0,229,160,.18);text-decoration:none;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+.pf-certificate-card:hover{transform:translateY(-2px);border-color:rgba(0,229,160,.42);box-shadow:0 15px 35px rgba(0,0,0,.28);}
+.pf-certificate-preview{width:128px;min-height:132px;object-fit:cover;background:#07101f;border-right:1px solid rgba(113,151,211,.14);}
+.pf-certificate-file{width:128px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#71cfff;border-right:1px solid rgba(113,151,211,.14);}
+.pf-certificate-info{padding:16px;display:flex;flex-direction:column;justify-content:center;min-width:0;}
+.pf-certificate-title{font-size:13px;font-weight:700;color:#f2f6ff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pf-certificate-type{margin-top:6px;color:#758bab;font-size:10px;text-transform:uppercase;letter-spacing:.09em;}
+.pf-certificate-verified{margin-top:13px;color:#42e6b2;font:700 9px/1 var(--font-mono);letter-spacing:.1em;text-transform:uppercase;}
 .pf-share-box{border-radius:12px;padding:16px;background:linear-gradient(135deg,rgba(255,215,106,.06),rgba(30,111,217,.05));border:1px solid rgba(255,215,106,.22);margin-top:10px;}
 .pf-share-box .flex-share-label{margin-bottom:8px;}
 .pf-preview-frame{border-radius:14px;padding:2px;background:linear-gradient(135deg,rgba(255,215,106,.35),rgba(30,111,217,.25));margin-top:10px;}
 .pf-preview-frame-inner{border-radius:12px;background:var(--bg-left,var(--surface));padding:16px;}
 /* ── Reputation Summary: professional fintech-style snapshot strip, near top of public profile ── */
-.pf-reputation-summary{display:grid;grid-template-columns:repeat(6,1fr);background-image:var(--glass-bg);border:1px solid var(--border-soft);border-radius:12px;overflow:hidden;margin-bottom:16px;box-shadow:var(--shadow-xs);}
+.pf-reputation-summary{grid-column:1/-1;display:grid;grid-template-columns:repeat(6,1fr);background:rgba(8,16,31,.78);border:1px solid rgba(113,151,211,.16);border-radius:16px;overflow:hidden;box-shadow:0 16px 45px rgba(0,0,0,.2);}
 .pf-rep-item{padding:14px 16px;border-right:1px solid var(--border-soft);position:relative;min-width:0;}
 .pf-rep-item:last-child{border-right:none;}
 .pf-rep-label{font-family:var(--font-mono);font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-faint);margin-bottom:8px;white-space:nowrap;}
@@ -5057,13 +5071,13 @@ function renderPublicFlexProfilePage(rec){
   const highlightItems=flexHighlightItems(sec,{league:rec.league,trust:rec.trust,traderScore:rec.traderScore,communityRank:rec.communityRank,badgesCount:(sec.badges&&rec.badges)?rec.badges.length:null});
   const header=flexProfileHeaderHTML(rec.displayName,avatarHTML,tagline,highlightItems);
   const repSummary=flexReputationSummaryHTML({traderScore:rec.traderScore,league:rec.league,trust:rec.trust,communityRank:rec.communityRank});
-  const statsCard=sec.statistics?('<div class="pf-panel"><div class="flex-feed-head"><div class="eyebrow">Statistics</div></div>'+renderFlexCardHTML(rec.displayName,rec.visibility,rec.snapshot)+'</div>'):'';
+  const statsCard=sec.statistics?('<div class="pf-panel pf-stats-panel"><div class="flex-feed-head"><div class="eyebrow">Performance Overview</div></div>'+renderFlexCardHTML(rec.displayName,rec.visibility,rec.snapshot)+'</div>'):'';
   const badgesHTML=(sec.badges&&rec.badges&&rec.badges.length)?(
-    '<div class="pf-panel"><div class="flex-feed-head"><div class="eyebrow">Badges</div></div>'
+    '<div class="pf-panel pf-badges-panel"><div class="flex-feed-head"><div class="eyebrow">Badge Collection</div></div>'
     +'<div class="flex-showcase-grid">'+rec.badges.map(function(b){const color=lwRarityColor(b.rarity);return'<div class="flex-showcase-card" style="cursor:pointer;" onclick="trackFlexEvent('+JSON.stringify(rec.email)+',\'badgeView\')"><div class="flex-showcase-card-head"><span class="flex-showcase-icon" style="color:'+esc(color)+';">'+b.icon+'</span><div class="flex-showcase-name">'+esc(b.title)+'</div></div><div class="flex-rarity-pill" style="color:'+esc(color)+';">'+esc(b.rarity)+'</div></div>';}).join('')+'</div></div>'
   ):'';
   const achvHTML=sec.achievements?(
-    '<div class="pf-panel"><div class="flex-feed-head"><div class="eyebrow">Achievement Showcase</div></div>'
+    '<div class="pf-panel pf-achievements-panel"><div class="flex-feed-head"><div class="eyebrow">Recent Achievements</div></div>'
     +'<div id="pf-achievement-list" class="lw-activity-feed-list"><div class="lw-recent-empty">Loading achievements…</div></div></div>'
   ):'';
   content.innerHTML=header+repSummary+statsCard+badgesHTML+achvHTML;
@@ -16037,7 +16051,7 @@ function flexReputationSummaryHTML(data){
 }
 function flexProfileHeaderHTML(name,avatarHTML,tagline,items){
   return '<div class="pf-profile-header"><div class="pf-profile-header-row"><div class="pf-avatar-lg">'+avatarHTML+'</div>'
-    +'<div><div class="pf-name-xl">'+esc(name)+'</div><div class="pf-tagline">'+esc(tagline)+'</div></div></div>'
+    +'<div><div class="pf-name-xl">'+esc(name)+'</div><div class="pf-tagline">'+esc(tagline)+'</div><div class="pf-public-badge"><span class="pf-public-badge-dot"></span>Verified performance profile</div></div></div>'
     +flexHighlightStripHTML(items)+'</div>';
 }
 function renderPublicFlexProfileBox(name,avatarUrl,league,trust,scores){

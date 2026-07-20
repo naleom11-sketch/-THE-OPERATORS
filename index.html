@@ -1890,7 +1890,7 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
     }).filter(Boolean).join(' ');
 
     if(sec.about && (row.bio || row.trading_style || links)){
-      var about = '<div class="pf-panel"><div class="flex-feed-head"><div class="eyebrow">About the Trader</div></div>'
+      var about = '<div class="pf-panel pf-about-panel"><div class="flex-feed-head"><div class="eyebrow">About the Trader</div></div>'
         + (row.bio ? '<p style="color:var(--text-muted);line-height:1.7;margin:0 0 12px;">' + esc(row.bio) + '</p>' : '')
         + (row.trading_style ? '<div class="flex-trader-chip flex-trust-chip" style="margin-bottom:12px;">Trading style: ' + esc(row.trading_style) + '</div>' : '')
         + (links ? '<div style="display:flex;gap:8px;flex-wrap:wrap;">' + links + '</div>' : '')
@@ -1906,12 +1906,17 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
         .eq('is_public', true)
         .eq('verified', true)
         .order('created_at', { ascending:false });
+      if(certResult.error) console.error('Verified certificates could not be loaded:', certResult.error);
       var certs = certResult.data || [];
       if(certs.length){
-        var certHtml = '<div class="pf-panel"><div class="flex-feed-head"><div class="eyebrow">Verified Certificates</div></div><div class="flex-showcase-grid">'
+        var certHtml = '<div class="pf-panel pf-certificate-panel"><div class="flex-feed-head"><div><div class="eyebrow">Verified Proofs</div><div style="font-size:12px;color:var(--text-faint);margin-top:5px;">Reviewed trading evidence and certificates</div></div><span class="flex-verified-badge">✓ Admin verified</span></div><div class="pf-certificate-grid">'
           + certs.map(function(cert){
               var href = publicAsset(cert.storage_path);
-              return '<a class="flex-showcase-card" target="_blank" rel="noopener noreferrer" href="' + esc(href) + '"><div class="flex-showcase-card-head"><span class="flex-showcase-icon">✓</span><div class="flex-showcase-name">' + esc(cert.title) + '</div></div><div class="flex-rarity-pill" style="color:#00E5A0;">Verified</div></a>';
+              var isImage = /\.(?:jpe?g|png|webp)$/i.test(cert.storage_path || cert.title || '');
+              var preview = isImage
+                ? '<img class="pf-certificate-preview" src="' + esc(href) + '" alt="' + esc(cert.title) + '">'
+                : '<div class="pf-certificate-file">▤</div>';
+              return '<a class="pf-certificate-card" target="_blank" rel="noopener noreferrer" href="' + esc(href) + '">' + preview + '<div class="pf-certificate-info"><div class="pf-certificate-title">' + esc(cert.title) + '</div><div class="pf-certificate-type">' + esc(String(cert.certificate_type || 'certificate').replace(/_/g,' ')) + '</div><div class="pf-certificate-verified">✓ Verified evidence</div></div></a>';
             }).join('')
           + '</div></div>';
         content.insertAdjacentHTML('beforeend', certHtml);
@@ -2016,7 +2021,7 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
         if(allowedTypes.indexOf(file.type) === -1) throw new Error(file.name + ' has an unsupported file type.');
         var safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
         var path = userId + '/proofs/' + slotKey + '/' + crypto.randomUUID() + '-' + safeName;
-        var upload = await sb.storage.from('flex-private').upload(path, file, { contentType:file.type });
+        var upload = await sb.storage.from('flex-public').upload(path, file, { contentType:file.type });
         if(upload.error) throw upload.error;
         var inserted = await sb.from('flex_certificates').insert({
           flex_page_id: pageResult.data.id,
@@ -2028,8 +2033,7 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
           verified: false
         }).select('*').single();
         if(inserted.error) throw inserted.error;
-        var signed = await sb.storage.from('flex-private').createSignedUrl(path, 3600);
-        state.flex.proofs[slotKey].push(signed.data ? signed.data.signedUrl : '');
+        state.flex.proofs[slotKey].push(publicAsset(path));
         window.__operatorsProofRows[slotKey].push(inserted.data);
       }
       if(currentPage === 'flex') renderPage();
@@ -2043,10 +2047,9 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
   window.deleteFlexProof = async function(slotKey, index){
     var row = (window.__operatorsProofRows[slotKey] || [])[index];
     if(!row) return;
-    var removed = await sb.storage.from('flex-private').remove([row.storage_path]);
-    if(removed.error){ showToast('Could not remove file.'); return; }
-    // An approved proof may also have a public copy for the shared Flex Page.
-    await sb.storage.from('flex-public').remove([row.storage_path]);
+    var removedPublic = await sb.storage.from('flex-public').remove([row.storage_path]);
+    var removedPrivate = await sb.storage.from('flex-private').remove([row.storage_path]);
+    if(removedPublic.error && removedPrivate.error){ showToast('Could not remove file.'); return; }
     await sb.from('flex_certificates').delete().eq('id', row.id);
     window.__operatorsProofRows[slotKey].splice(index,1);
     state.flex.proofs[slotKey].splice(index,1);
@@ -2105,7 +2108,7 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
       if(!state.flex.proofs[slot]) state.flex.proofs[slot] = [];
       if(!window.__operatorsProofRows[slot]) window.__operatorsProofRows[slot] = [];
       var signed = await sb.storage.from('flex-private').createSignedUrl(cert.storage_path, 3600);
-      state.flex.proofs[slot].push(signed.data ? signed.data.signedUrl : '');
+      state.flex.proofs[slot].push(signed.data && signed.data.signedUrl ? signed.data.signedUrl : publicAsset(cert.storage_path));
       window.__operatorsProofRows[slot].push(cert);
     }
     if(currentPage === 'flex') renderPage();
