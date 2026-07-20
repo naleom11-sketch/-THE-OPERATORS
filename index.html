@@ -2291,10 +2291,10 @@ window.addEventListener('DOMContentLoaded', function(){
     return;
   }
 
-  supabaseClient.auth.getSession().then(({ data, error }) => {
-    if(error) console.warn('Session check failed:', error.message);
-    if(data?.session) showApp();
-  });
+  // Always begin at the public landing page for the normal website URL.
+  // A signed-in session is preserved, but the dashboard opens only after the
+  // visitor intentionally uses the sign-in/get-started flow above.
+  showHome();
 }, { once:true });
 
 </script>
