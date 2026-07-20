@@ -971,7 +971,7 @@ body::before{
     </button>
     <div class="nav-cta-group">
       <a href="#" class="nav-signup" onclick="showAuth('signup');return false;">Sign up</a>
-      <a href="#" class="nav-cta" onclick="showAuth('signin');return false;">Get Started</a>
+      <a href="#" class="nav-cta" onclick="showAuth('signup');return false;">Get Started</a>
     </div>
   </div>
 </nav>
@@ -983,7 +983,7 @@ body::before{
   <a href="#leaderboard">Leaderboard <span>04</span></a>
   <a href="https://tushargaikwad231207-cloud.github.io/epicshitwebstdio/" target="_blank" rel="noopener noreferrer">Studio <span>05</span></a>
   <a href="#" class="nav-signup" onclick="showAuth('signup');return false;">Sign up</a>
-  <a href="#" class="nav-cta" onclick="showAuth('signin');return false;">Get Started</a>
+  <a href="#" class="nav-cta" onclick="showAuth('signup');return false;">Get Started</a>
 </div>
 
 <div class="wrap">
@@ -1000,7 +1000,7 @@ body::before{
     <h1>The Complete Trading <em>Intelligence</em> Platform</h1>
     <p class="hero-desc"><b>Track trades.</b> Analyze behavior. Improve consistency. <b>Master risk management.</b></p>
     <div class="btn-row">
-      <a href="#" class="btn btn-primary" onclick="showAuth('signin');return false;">Get Started</a>
+      <a href="#" class="btn btn-primary" onclick="showAuth('signup');return false;">Get Started</a>
       <a href="#analytics" class="btn btn-ghost">Explore Platform</a>
     </div>
     <div class="hero-proof" aria-label="Platform highlights">
@@ -1197,7 +1197,7 @@ body::before{
   <section class="cta container" id="cta">
     <h2>Start Your Trading Journey</h2>
     <p>Turn data into discipline.</p>
-    <a href="#" class="btn btn-primary" onclick="showAuth('signin');return false;">Get Started</a>
+    <a href="#" class="btn btn-primary" onclick="showAuth('signup');return false;">Get Started</a>
   </section>
 
   <footer>THE OPERATORS · TRADING INTELLIGENCE PLATFORM · <span id="yr"></span></footer>
@@ -1518,7 +1518,7 @@ async function connectJournalFrame(frame){
     if(loading) loading.innerHTML = '<strong style="color:#ff8092;letter-spacing:.03em;">FLEX PAGE COULD NOT LOAD</strong><button type="button" onclick="location.reload()" style="padding:10px 18px;border:1px solid #43bdff;border-radius:9px;background:#0d2740;color:#fff;cursor:pointer;">Retry</button>';
   }
 }
-function showApp(){
+async function showApp(){
   document.getElementById('page-home').style.display = 'none';
   document.getElementById('page-auth').style.display = 'none';
   document.getElementById('page-app').style.display = 'block';
@@ -1527,7 +1527,19 @@ function showApp(){
     const frame = document.getElementById('journalFrame');
     frame.addEventListener('load', function(){ connectJournalFrame(frame); }, { once:true });
     // Versioned URL prevents GitHub Pages/browser cache from serving an older journal UI.
-    frame.src = 'journal.html?v=20260721-flex-recent-off-3';
+    let journalUrl = 'journal.html?v=20260721-clean-new-users-1';
+    if(!getRequestedFlexSlug()){
+      try{
+        const authResult = await supabaseClient.auth.getSession();
+        const ownerEmail = authResult.data && authResult.data.session && authResult.data.session.user
+          ? authResult.data.session.user.email
+          : '';
+        if(ownerEmail) journalUrl += '&owner=' + encodeURIComponent(ownerEmail);
+      }catch(error){
+        console.warn('Could not prepare the account-specific journal URL:', error);
+      }
+    }
+    frame.src = journalUrl;
     journalLoaded = true;
   }
 }
@@ -1569,6 +1581,121 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
     {badge_id:'psycho_trader',badge_name:'Psycho Trader',badge_level:'Special',rarity:'Unranked',icon:'☠',progress:100,is_unlocked:true,is_public:true},
     {badge_id:'legend_status',badge_name:'Legend Status',badge_level:'Legend',rarity:'Mythic',icon:'★',progress:100,is_unlocked:true,is_public:true}
   ];
+
+  var PRESENTATION_DEMO_SLUG = 'naleom11-b44d46';
+
+  function isPresentationDemoProfile(){
+    return !!(state.flex && String(state.flex.slug || '').toLowerCase() === PRESENTATION_DEMO_SLUG);
+  }
+
+  function setPresentationBadgeDebugMode(enabled){
+    [
+      'LW_DEBUG_FORCE_COMEBACK_KID',
+      'LW_DEBUG_FORCE_NO_REVENGE_TRADING',
+      'LW_DEBUG_FORCE_CENTURY_CLUB',
+      'LW_DEBUG_FORCE_PATIENCE_PAYS',
+      'LW_DEBUG_FORCE_ZERO_REVENGE',
+      'LW_DEBUG_FORCE_IRON_HANDS',
+      'LW_DEBUG_FORCE_METRONOME',
+      'LW_DEBUG_FORCE_DRAWDOWN_SHIELD',
+      'LW_DEBUG_FORCE_FULL_CIRCLE',
+      'LW_DEBUG_FORCE_IMPROVEMENT_ARC',
+      'LW_DEBUG_FORCE_RISK_SENTINEL_LEGEND',
+      'LW_DEBUG_FORCE_PSYCHO_TRADER',
+      'LW_DEBUG_FORCE_LEGEND_STATUS'
+    ].forEach(function(flag){ window[flag] = !!enabled; });
+  }
+
+  function snapshotBadges(row){
+    var source = row && Array.isArray(row.badges_snapshot) ? row.badges_snapshot : [];
+    return source.filter(function(badge){
+      return badge && badge.unlocked !== false && badge.is_unlocked !== false;
+    }).map(function(badge){
+      return {
+        icon:badge.icon || '*',
+        title:badge.title || badge.badge_name || 'Achievement',
+        rarity:badge.rarity || badge.badge_level || 'Common',
+        unlocked:true
+      };
+    });
+  }
+
+  async function cleanAccidentalPresentationDataForRegularUser(){
+    if(!session || !session.user || isPresentationDemoProfile()) return;
+    setPresentationBadgeDebugMode(false);
+
+    var userId = session.user.id;
+    var emailName = String(session.user.email || 'Operator').split('@')[0] || 'Operator';
+    var runtimeHadPresentation = false;
+
+    if(Array.isArray(state.accounts)){
+      state.accounts.forEach(function(account){
+        var original = Array.isArray(account.trades) ? account.trades : [];
+        var cleanTrades = original.filter(function(trade){
+          var isSeed = !!(trade && (trade.presentationSeed || String(trade.sourceKey || '').indexOf('presentation:') === 0));
+          if(isSeed) runtimeHadPresentation = true;
+          return !isSeed;
+        });
+        account.trades = cleanTrades;
+        account.nextId = cleanTrades.reduce(function(max, trade){ return Math.max(max, Number(trade.id) || 0); }, 0) + 1;
+        if(account.name === 'Presentation Portfolio') account.name = 'ID ' + account.id;
+      });
+      loadActiveAccountIntoState();
+    }
+
+    var existing = await sb.from('trades')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('is_presentation', true)
+      .limit(1);
+    var databaseHadPresentation = !existing.error && !!(existing.data && existing.data.length);
+    var needsCleanup = runtimeHadPresentation || databaseHadPresentation;
+
+    if(databaseHadPresentation){
+      await sb.from('trades').delete().eq('user_id', userId).eq('is_presentation', true);
+      await sb.from('achievements').delete().eq('user_id', userId).in('badge_id', PRESENTATION_BADGES.map(function(badge){ return badge.badge_id; }));
+      await sb.from('community_profiles').delete().eq('user_id', userId).eq('is_presentation', true);
+    }
+
+    if(needsCleanup){
+      ensureAchievementsState();
+      PRESENTATION_BADGES.forEach(function(badge){ delete state.achievements.items[badge.badge_id]; });
+      state.achievements.publishedIds = (state.achievements.publishedIds || []).filter(function(id){
+        return !PRESENTATION_BADGES.some(function(badge){ return badge.badge_id === id; });
+      });
+
+      var profile = getProfileExtra();
+      if(state.profile.username === 'Tushar') state.profile.username = emailName;
+      if(profile.displayName === 'Tushar Gaikwad') profile.displayName = '';
+      if(profile.bio === 'SMC trader focused on disciplined execution, capital protection and consistent long-term growth.') profile.bio = '';
+      if(String(profile.tradingStyle || '').indexOf('Smart Money Concepts (SMC)') === 0) profile.tradingStyle = '';
+      if(state.flex){
+        if(state.flex.displayName === 'Tushar Gaikwad') state.flex.displayName = '';
+        state.flex.snapshot = null;
+      }
+      await saveState();
+
+      await sb.from('profiles').update({
+        display_name:emailName,
+        bio:'',
+        trading_style:'',
+        updated_at:new Date().toISOString()
+      }).eq('id', userId).eq('display_name', 'Tushar Gaikwad');
+
+      await sb.from('flex_pages').update({
+        display_name:emailName,
+        bio:'',
+        trading_style:'',
+        stats_snapshot:cleanJson({}),
+        badges_snapshot:cleanJson([]),
+        achievements_snapshot:cleanJson({}),
+        updated_at:new Date().toISOString()
+      }).eq('user_id', userId);
+    }
+
+    renderTopbar();
+    renderPage();
+  }
 
   function stripPresentationControls(){
     var blocked = ['unlockAllAchievementsTest','seedPerfectWeekTest','clearTestPerfectWeeks','uiSeedLwTestData','uiClearLwTestData'];
@@ -1761,6 +1888,8 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
 
   async function seedPresentationProfile(){
     if(!session || !session.user) return;
+    if(!isPresentationDemoProfile()) return;
+    setPresentationBadgeDebugMode(true);
     var userId = session.user.id;
     var dbTrades = await sb.from('trades')
       .select('source_key,trade_date,side,pair,strategy,session,quality,lot,entry_price,exit_price,stop_loss,take_profit,notes')
@@ -1880,9 +2009,7 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
       trust: trust,
       traderScore: Math.round(scores.composite || 0),
       communityRank: null,
-      badges: PRESENTATION_BADGES.map(function(badge){
-        return {icon:badge.icon,title:badge.badge_name,rarity:badge.rarity,unlocked:true};
-      }),
+      badges: snapshotBadges(row),
       avatarDataUrl: publicAsset(row.avatar_path),
       email: row.user_id
     };
@@ -1954,9 +2081,26 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
     var trades = marketFilteredTrades(computedTrades());
     var stats = getStats(trades);
     var scores = lwScoresFromStats(stats);
-    var badges = PRESENTATION_BADGES.map(function(badge){
-      return { icon:badge.icon, title:badge.badge_name, rarity:badge.rarity, unlocked:true };
-    });
+    var badges;
+    if(isPresentationDemoProfile()){
+      badges = PRESENTATION_BADGES.map(function(badge){
+        return { icon:badge.icon, title:badge.badge_name, rarity:badge.rarity, unlocked:true };
+      });
+    }else{
+      var earnedResult = await sb.from('achievements')
+        .select('icon,badge_name,rarity,badge_level,is_unlocked,is_public')
+        .eq('user_id', userId)
+        .eq('is_unlocked', true)
+        .eq('is_public', true);
+      badges = earnedResult.error ? [] : (earnedResult.data || []).map(function(badge){
+        return {
+          icon:badge.icon || '*',
+          title:badge.badge_name || 'Achievement',
+          rarity:badge.rarity || badge.badge_level || 'Common',
+          unlocked:true
+        };
+      });
+    }
     var displayName = state.flex.displayName || profile.displayName || session.user.email.split('@')[0];
     var avatarPath = await uploadAvatar(getAvatarDataUrl(), userId, page.avatar_path);
     var sections = Object.assign({ about:true, certificates:true }, state.flex.sections || {}, { metric_visibility:state.flex.visibility || {} });
@@ -2136,10 +2280,11 @@ window.OPERATORS_BRIDGE_SOURCE = String.raw`
     setTimeout(async function(){
       try{
         await loadOwnerFlex();
-        await seedPresentationProfile();
+        if(isPresentationDemoProfile()) await seedPresentationProfile();
+        else await cleanAccidentalPresentationDataForRegularUser();
       }catch(error){
-        console.error('Presentation data setup failed:', error);
-        showToast('Run the presentation database SQL, then refresh.');
+        console.error('Account data setup failed:', error);
+        showToast('Your account data could not be prepared. Refresh and try again.');
       }
     }, 350);
   }
@@ -2282,7 +2427,7 @@ document.getElementById('authForm').addEventListener('submit', async function(e)
 
 // Start only after the large embedded journal script below has been parsed.
 // This prevents direct Flex links from opening a blank page.
-window.addEventListener('DOMContentLoaded', function(){
+function routeOperatorsEntry(){
   const params = new URLSearchParams(window.location.search);
   if(params.get('mode') === 'signup') toggleMode();
 
@@ -2291,11 +2436,15 @@ window.addEventListener('DOMContentLoaded', function(){
     return;
   }
 
-  // Always begin at the public landing page for the normal website URL.
-  // A signed-in session is preserved, but the dashboard opens only after the
-  // visitor intentionally uses the sign-in/get-started flow above.
+  // The normal website URL must always begin at the landing page, even when
+  // Chrome restores a previously-open dashboard from its back/forward cache.
   showHome();
-}, { once:true });
+}
+
+// Normal first load.
+window.addEventListener('DOMContentLoaded', routeOperatorsEntry, { once:true });
+// Chrome/Safari cached-tab restore.
+window.addEventListener('pageshow', routeOperatorsEntry);
 
 </script>
 <!-- The journal is loaded from journal.html for faster startup. -->

@@ -4881,19 +4881,19 @@ body:has(.blublu-fg) .nav-item-blublu.active{
 
 <script>
 // TEMP DEBUG FLAG — flip to false or delete to go back to the real earn-it logic.
-window.LW_DEBUG_FORCE_COMEBACK_KID = true;
+window.LW_DEBUG_FORCE_COMEBACK_KID = false;
 // TEMP DEBUG FLAG — flip to false or delete to go back to the real earn-it logic.
-window.LW_DEBUG_FORCE_NO_REVENGE_TRADING = true;
+window.LW_DEBUG_FORCE_NO_REVENGE_TRADING = false;
 // TEMP DEBUG FLAG — flip to false or delete to go back to the real earn-it logic.
-window.LW_DEBUG_FORCE_ZERO_REVENGE = true;
+window.LW_DEBUG_FORCE_ZERO_REVENGE = false;
 // TEMP DEBUG FLAG — flip to false or delete to go back to the real earn-it logic.
-window.LW_DEBUG_FORCE_FULL_CIRCLE = true;
+window.LW_DEBUG_FORCE_FULL_CIRCLE = false;
 // TEMP DEBUG FLAG — flip to false or delete to go back to the real earn-it logic.
-window.LW_DEBUG_FORCE_IMPROVEMENT_ARC = true;
+window.LW_DEBUG_FORCE_IMPROVEMENT_ARC = false;
 // TEMP DEBUG FLAG — flip to false or delete to go back to the real earn-it logic.
-window.LW_DEBUG_FORCE_METRONOME = true;
+window.LW_DEBUG_FORCE_METRONOME = false;
 // TEMP DEBUG FLAG — flip to false or delete to go back to the real earn-it logic.
-window.LW_DEBUG_FORCE_RISK_SENTINEL_LEGEND = true;
+window.LW_DEBUG_FORCE_RISK_SENTINEL_LEGEND = false;
 /* ============================================================
    DATABASE CONNECTION (replaces window.storage with real Postgres via PostgREST)
    IMPORTANT: Update API_BASE_URL below whenever your cloudflared tunnel URL changes.
@@ -5066,7 +5066,7 @@ async function selectTheme(id){
    AUTH
    ============================================================ */
 const DEMO_CREDS = {email:'tushargaikwad231207@gmail.com', password:'123'};
-let loggedInUser = 'tushargaikwad231207@gmail.com';
+let loggedInUser = new URLSearchParams(window.location.search).get('owner') || '';
 
 /* ===== PUBLIC FLEX SHARE LINK (e.g. Instagram bio link) ===== */
 const PUBLIC_FLEX_SLUG=(function(){
@@ -12245,7 +12245,7 @@ function lwImprovementArcStatus(){
 
 /* ---- Behavior-based badges. Every unlock rule is a function of the
    trader's own stats/scores, never of raw P&L. ---- */
-window.LW_DEBUG_FORCE_PSYCHO_TRADER=true; // TEMP: testing unlocked state, set to false to restore real locked/coming-soon state
+window.LW_DEBUG_FORCE_PSYCHO_TRADER=false; // Real earn-it logic; the presentation profile enables its demo state through the Supabase bridge.
 const LW_BADGES=[
   {code:'league_breaker',  icon:'♛', title:'League Breaker',   desc:'Reached Diamond league or higher',     rarity:'Epic',      story:'Cracking the top tiers of the League Ladder — sustained excellence across every discipline the platform measures.', test:s=>s.composite>=90},
   {code:'legend_status',   icon:'★', title:'Legend Status',    desc:'Reached the Legend league',             rarity:'Legendary', story:'The top of the League Ladder. Top 2% composite score, sustained for six months straight.', test:s=>s.composite>=95},
